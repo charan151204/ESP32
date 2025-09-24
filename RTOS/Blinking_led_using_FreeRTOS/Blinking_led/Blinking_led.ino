@@ -9,51 +9,59 @@ static const int led_pin = 2;
 
 void toggleLED_500ms(void *parameter)
 {
-  while(1)
+  while (1)
   {
     digitalWrite(led_pin, HIGH);
+    Serial.println("Task 1 (500ms ON)");
     vTaskDelay(500 / portTICK_PERIOD_MS);
+
     digitalWrite(led_pin, LOW);
+    Serial.println("Task 1 (500ms OFF)");
     vTaskDelay(500 / portTICK_PERIOD_MS);
   }
 }
 
 void toggleLED_1sec(void *parameter)
 {
-  while(1)
+  while (1)
   {
     digitalWrite(led_pin, HIGH);
+    Serial.println("Task 2 (1s ON)");
     vTaskDelay(1000 / portTICK_PERIOD_MS);
+
     digitalWrite(led_pin, LOW);
+    Serial.println("Task 2 (1s OFF)");
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
-void setup() 
+
+void setup()
 {
-  pinMode(2, OUTPUT);
+  Serial.begin(115200);
+  pinMode(led_pin, OUTPUT);
 
-  xTaskCreatePinnedToCore(  // To create a Task
-    toggleLED_500ms,        // Function to be called
-    "Toggle LED 500ms",     // Name of the task
-    1024,                   // Stack size(bytes) in number for ESP32 and words for FreeRTOS
-    NULL,                   // Parameter to be passed to the function
-    0,                      // Task priority (0 to configMAX_PRIORITIES -1)
-    NULL,                   //  Task Handle
-    app_cpu);               // Run on one core
+  // Task 1: 500ms blink
+  xTaskCreatePinnedToCore(
+      toggleLED_500ms,
+      "Toggle LED 500ms",
+      2048,
+      NULL,
+      1,     // priority 1
+      NULL,
+      app_cpu);
 
+  // Task 2: 1s blink
   xTaskCreatePinnedToCore(
       toggleLED_1sec,
       "Toggle LED 1sec",
-      1024,
+      2048,
       NULL,
-      0,
+      1,     // same priority
       NULL,
       app_cpu);
-      
+}
 
-} 
-
-void loop() {
-  // put your main code here, to run repeatedly:
-
+void loop()
+{
+  // Nothing here, tasks run independently
 }
