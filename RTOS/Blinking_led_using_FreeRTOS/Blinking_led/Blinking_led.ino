@@ -11,9 +11,9 @@ void toggleLED_500ms(void *parameter)
 {
   while(1)
   {
-    digitalWrite(led, HIGH);
+    digitalWrite(led_pin, HIGH);
     vTaskDelay(500 / portTICK_PERIOD_MS);
-    digitalWrite(led, LOW);
+    digitalWrite(led_pin, LOW);
     vTaskDelay(500 / portTICK_PERIOD_MS);
   }
 }
@@ -22,9 +22,9 @@ void toggleLED_1sec(void *parameter)
 {
   while(1)
   {
-    digitalWrite(led, HIGH);
+    digitalWrite(led_pin, HIGH);
     vTaskDelay(1000 / portTICK_PERIOD_MS);
-    digitalWrite(led, LOW);
+    digitalWrite(led_pin, LOW);
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
